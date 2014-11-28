@@ -1,0 +1,19 @@
+{
+  "name": "AStar",
+  "main": "AStar.js",
+  "version": "0.0.0",
+  "authors": [
+    "Bradley Anderson <banderso@nerdery.com>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "requirejs": "~2.1.15"
+  }
+}

@@ -1,0 +1,25 @@
+.grid {
+    table-layout: fixed;
+}
+
+.grid-cell {
+    width: 20px;
+    height: 20px;
+    border: 1px solid #000000;
+}
+
+.grid-cell_start {
+    background-color: #0f0;
+}
+
+.grid-cell_final {
+    background-color: #f00;
+}
+
+.grid-cell_inaccessible {
+    background-color: #00f;
+}
+
+.grid-cell_path {
+    background-color: #ff0;
+}
