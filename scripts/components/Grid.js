@@ -55,7 +55,7 @@ define(function (require) {
 
 
     /**
-     * Calculates an A* path between two grid cells
+     * Calculates the shortest path between two grid cells using Dijkstra's algorithm
      * 
      * @param  {Cell}   cellStart   Starting cell
      * @param  {Cell}   cellFinal   Goal cell
