@@ -3,6 +3,9 @@ define(function (require) {
 
     var Cell = require('components/Cell');
     var Grid = require('components/Grid');
+    var StartGridMode = require('views/GridMode/StartGridMode');
+    var FinalGridMode = require('views/GridMode/FinalGridMode');
+    var WallGridMode = require('views/GridMode/WallGridMode');
 
 
     function GridView (element) {
@@ -15,24 +18,34 @@ define(function (require) {
 
         this.cellFinal = null;
 
-        this.newCellType = Cell.TYPE.PLAIN;
+        this.gridMode = new GridView.MODE.START(this);
 
         this.path = [];
-
-        this._onCellClickStart = this._onCellClickStart.bind(this);
-        this._onCellClickEnd = this._onCellClickEnd.bind(this);
-        this._onCellMouseDownWall = this._onCellMouseDownWall.bind(this);
-        this._onCellMouseUpWall = this._onCellMouseUpWall.bind(this);
-        this._onCellMouseOver = this._onCellMouseOver.bind(this);
 
         this.init();
     }
 
 
     GridView.MODE = {
-        WALL:   'wall',
-        START:  'start',
-        END:    'end'
+        WALL:   WallGridMode,
+        START:  StartGridMode,
+        FINAL:  FinalGridMode
+    };
+
+
+    GridView.getGridModeByName = function (name) {
+        var prop;
+        var gridMode = null;
+        var gridModes = GridView.MODE;
+        for (prop in gridModes) {
+            if (gridModes.hasOwnProperty(prop)) {
+                if (gridModes[prop].prototype.name === name) {
+                    gridMode = gridModes[prop];
+                    break;
+                }
+            }
+        }
+        return gridMode;
     };
 
 
@@ -64,89 +77,10 @@ define(function (require) {
     };
 
 
-    GridView.prototype.setMode = function (mode) {
-        var cell;
-        var cells = this.grid.cellsFlattened;
-        var i = 0;
-
-        // TOOD: A lot of wet code needs drying in these while loops
-        switch (mode) {
-            case GridView.MODE.WALL:
-                while ((cell = cells[i++]) !== undefined) {
-                    cell.element.removeEventListener('click', this._onCellClickStart);
-                    cell.element.removeEventListener('click', this._onCellClickEnd);
-                    cell.element.addEventListener('mousedown', this._onCellMouseDownWall);
-                    cell.element.addEventListener('mouseup', this._onCellMouseUpWall);
-                }
-                break;
-
-            case GridView.MODE.START:
-                while ((cell = cells[i++]) !== undefined) {
-                    cell.element.addEventListener('click', this._onCellClickStart);
-                    cell.element.removeEventListener('click', this._onCellClickEnd);
-                    cell.element.removeEventListener('mousedown', this._onCellMouseDownWall);
-                    cell.element.removeEventListener('mouseup', this._onCellMouseUpWall);
-                }
-                break;
-
-            case GridView.MODE.END:
-                while ((cell = cells[i++]) !== undefined) {
-                    cell.element.removeEventListener('click', this._onCellClickStart);
-                    cell.element.addEventListener('click', this._onCellClickEnd);
-                    cell.element.removeEventListener('mousedown', this._onCellMouseDownWall);
-                    cell.element.removeEventListener('mouseup', this._onCellMouseUpWall);
-                }
-                break;
-        }
+    GridView.prototype.setMode = function (gridMode) {
+        this.gridMode.disable();
+        this.gridMode = new gridMode(this).enable();
         return this;
-    };
-
-
-    GridView.prototype._onCellClickStart = function (e) {
-        var cell = e.target.cell;
-        if (cell === this.cellFinal) {
-            return;
-        }
-        this.cellStart = cell;
-        this.updatePath();
-    };
-
-
-    GridView.prototype._onCellClickEnd = function (e) {
-        var cell = e.target.cell;
-        if (cell === this.cellStart) {
-            return;
-        }
-        this.cellFinal = cell;
-        this.updatePath();
-    };
-
-
-    GridView.prototype._onCellMouseDownWall = function (e) {
-        var cell = e.target.cell;
-        e.preventDefault();
-        if (cell === this.cellStart || cell === this.cellFinal) {
-            return;
-        }
-        this.newCellType = cell.type.isWalkable ? Cell.TYPE.INACCESSIBLE : Cell.TYPE.PLAIN;
-        cell.setType(this.newCellType);
-        this.updatePath();
-        this.element.addEventListener('mouseover', this._onCellMouseOver);
-    };
-
-
-    GridView.prototype._onCellMouseUpWall = function (e) {
-        this.element.removeEventListener('mouseover', this._onCellMouseOver);
-    };
-
-
-    GridView.prototype._onCellMouseOver = function (e) {
-        var cell = e.target.cell;
-        if (cell === this.cellStart || cell === this.cellFinal) {
-            return;
-        }
-        cell.setType(this.newCellType);
-        this.updatePath();
     };
 
 

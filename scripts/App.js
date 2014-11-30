@@ -24,8 +24,8 @@ define(function (require) {
     };
 
 
-    App.prototype._onUIViewModeRequest = function (mode) {
-        this.gridView.setMode(mode);
+    App.prototype._onUIViewModeRequest = function (gridModeName) {
+        this.gridView.setMode(GridView.getGridModeByName(gridModeName));
     };
 
 
