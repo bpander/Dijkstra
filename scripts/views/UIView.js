@@ -23,13 +23,16 @@ define(function (require) {
 
 
     UIView.prototype.init = function () {
+        this.element.addEventListener('change', this._onChange);
+        return this;
+    };
+
+
+    UIView.prototype.requestMode = function () {
         var checked = this.element.querySelector(':checked');
         if (checked !== null) {
             this.emit(UIView.EVENT_NAME.MODE_REQUEST, checked.value);
         }
-
-        this.element.addEventListener('change', this._onChange);
-
         return this;
     };
 

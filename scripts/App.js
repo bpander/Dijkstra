@@ -19,6 +19,7 @@ define(function (require) {
 
     App.prototype.init = function () {
         this.uiView.on(UIView.EVENT_NAME.MODE_REQUEST, this._onUIViewModeRequest);
+        this.uiView.requestMode();
         return this;
     };
 
