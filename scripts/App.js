@@ -1,6 +1,7 @@
 define(function (require) {
     'use strict';
 
+    var Cell = require('components/Cell');
     var Grid = require('components/Grid');
 
 
@@ -14,7 +15,9 @@ define(function (require) {
 
         this.cellFinal = null;
 
-        this.isBuilding = false;
+        this.newCellType = Cell.TYPE.PLAIN;
+
+        this.path = [];
 
         this._onChange = this._onChange.bind(this);
         this._onCellClickStart = this._onCellClickStart.bind(this);
@@ -55,19 +58,20 @@ define(function (require) {
 
 
     App.prototype.updatePath = function () {
-        var path;
 
-        this.grid.clear();
-
-        path = this.grid.getPathBetween(this.cellStart, this.cellFinal);
-        path.pop(); // Remove start cell
-        path.shift(); // Remove final cell
-        path.forEach(function (cell) {
-            cell.markPath();
+        this.grid.clearHeuristics();
+        this.path.forEach(function (cell) {
+            if (cell.type === Cell.TYPE.PATH || cell.type === Cell.TYPE.START || cell.type === Cell.TYPE.FINAL) {
+                cell.setType(Cell.TYPE.PLAIN);
+            }
         });
 
-        this.cellStart.markStart();
-        this.cellFinal.markFinal();
+        this.path = this.grid.getPathBetween(this.cellStart, this.cellFinal);
+        this.path.forEach(function (cell) {
+            cell.setType(Cell.TYPE.PATH);
+        });
+        this.cellStart.setType(Cell.TYPE.START);
+        this.cellFinal.setType(Cell.TYPE.FINAL);
 
         return this;
     };
@@ -117,13 +121,21 @@ define(function (require) {
 
 
     App.prototype._onCellClickStart = function (e) {
-        this.cellStart = e.target.cell;
+        var cell = e.target.cell;
+        if (cell === this.cellFinal) {
+            return;
+        }
+        this.cellStart = cell;
         this.updatePath();
     };
 
 
     App.prototype._onCellClickEnd = function (e) {
-        this.cellFinal = e.target.cell;
+        var cell = e.target.cell;
+        if (cell === this.cellStart) {
+            return;
+        }
+        this.cellFinal = cell;
         this.updatePath();
     };
 
@@ -131,8 +143,11 @@ define(function (require) {
     App.prototype._onCellMouseDownWall = function (e) {
         var cell = e.target.cell;
         e.preventDefault();
-        this.isBuilding = cell.isWalkable;
-        this.isBuilding ? cell.markInaccessible() : cell.markAccessible();
+        if (cell === this.cellStart || cell === this.cellFinal) {
+            return;
+        }
+        this.newCellType = cell.type.isWalkable ? Cell.TYPE.INACCESSIBLE : Cell.TYPE.PLAIN;
+        cell.setType(this.newCellType);
         this.updatePath();
         this.element.addEventListener('mouseover', this._onCellMouseOver);
     };
@@ -145,7 +160,10 @@ define(function (require) {
 
     App.prototype._onCellMouseOver = function (e) {
         var cell = e.target.cell;
-        this.isBuilding ? cell.markInaccessible() : cell.markAccessible();
+        if (cell === this.cellStart || cell === this.cellFinal) {
+            return;
+        }
+        cell.setType(this.newCellType);
         this.updatePath();
     };
 

@@ -14,57 +14,34 @@ define(function (require) {
 
         this.G = Infinity;
 
-        this.H = Infinity;
-
-        this.F = Infinity;
-
-        this.isWalkable = true;
+        this.type = Cell.TYPE.PLAIN;
 
         this.init();
     }
 
 
+    Cell.TYPE = {
+        START:          new CellType('grid-cell_start'),
+        FINAL:          new CellType('grid-cell_final'),
+        INACCESSIBLE:   new CellType('grid-cell_inaccessible', false),
+        PLAIN:          new CellType('grid-cell_plain'),
+        PATH:           new CellType('grid-cell_path')
+    };
+
+
     Cell.prototype.init = function () {
         this.element.classList.add('grid-cell');
         this.element.cell = this;
+        this.setType(this.type);
         return this;
     };
 
 
-    Cell.prototype.markStart = function () {
-        this.element.classList.add('grid-cell_start');
+    Cell.prototype.setType = function (type) {
+        this.element.classList.remove(this.type.className);
+        this.element.classList.add(type.className);
+        this.type = type;
         return this;
-    };
-
-
-    Cell.prototype.markFinal = function () {
-        this.element.classList.add('grid-cell_final');
-        return this;
-    };
-
-
-    Cell.prototype.markInaccessible = function () {
-        this.element.classList.add('grid-cell_inaccessible');
-        this.isWalkable = false;
-        return this;
-    };
-
-
-    Cell.prototype.markAccessible = function () {
-        this.element.classList.remove('grid-cell_inaccessible');
-        this.isWalkable = true;
-        return this;
-    };
-
-
-    Cell.prototype.markPath = function () {
-        this.element.classList.add('grid-cell_path');
-        return this;
-    };
-
-
-    Cell.prototype.getManhattanDistanceTo = function (cell) {
-        return Math.abs(cell.row - this.row) + Math.abs(cell.col - this.col);
     };
 
 
@@ -72,16 +49,21 @@ define(function (require) {
         return (this.row - cell.row === 0 || this.col - cell.col === 0) ? 10 : 14;
     };
 
-    Cell.prototype.reset = function () {
+
+    Cell.prototype.clearHeuristics = function () {
         this.parent = null;
         this.G = Infinity;
-        this.H = Infinity;
-        this.F = Infinity;
-        this.element.classList.remove('grid-cell_start');
-        this.element.classList.remove('grid-cell_path');
-        this.element.classList.remove('grid-cell_final');
         return this;
     };
+
+
+    function CellType (className, isWalkable) {
+
+        this.className = className;
+
+        this.isWalkable = typeof isWalkable === 'boolean' ? isWalkable : true;
+
+    }
 
 
     return Cell;

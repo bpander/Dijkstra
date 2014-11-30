@@ -68,18 +68,16 @@ define(function (require) {
         var closedList = new Collection();
 
         cellStart.G = 0;
-        cellStart.H = cellStart.getManhattanDistanceTo(cellFinal);
-        cellStart.F = cellStart.G + cellStart.H;
 
         while (true) {
-            cellCurrent = openList.getModelWithLowest('F');
-            if (openList.length === 0 || cellCurrent === cellFinal) {
+            cellCurrent = openList.getModelWithLowest('G');
+            if (openList.models.length === 0 || cellCurrent === cellFinal) {
                 break;
             }
             openList.remove(cellCurrent);
             closedList.add(cellCurrent);
             this.getAdjacentCells(cellCurrent).forEach(function (cellAdjacent) {
-                if (cellAdjacent.isWalkable === false || closedList.contains(cellAdjacent)) {
+                if (cellAdjacent.type.isWalkable === false || closedList.contains(cellAdjacent)) {
                     return;
                 }
                 if (openList.contains(cellAdjacent)) {
@@ -88,15 +86,12 @@ define(function (require) {
                     if (gScoreNew > gScoreOld) {
                         cellAdjacent.parent = cellCurrent.parent;
                         cellAdjacent.G = gScoreNew;
-                        cellAdjacent.F = cellAdjacent.G + cellAdjacent.H;
                     }
                     return;
                 }
                 openList.add(cellAdjacent);
                 cellAdjacent.parent = cellCurrent;
                 cellAdjacent.G = cellAdjacent.parent.G + cellAdjacent.getGScoreTo(cellCurrent);
-                cellAdjacent.H = cellAdjacent.getManhattanDistanceTo(cellFinal) * 10;
-                cellAdjacent.F = cellAdjacent.G + cellAdjacent.H;
             });
         }
 
@@ -138,12 +133,12 @@ define(function (require) {
     };
 
 
-    Grid.prototype.clear = function () {
+    Grid.prototype.clearHeuristics = function () {
         var cell;
         var cells = this.cellsFlattened;
         var i = 0;
         while ((cell = cells[i++]) !== undefined) {
-            cell.reset();
+            cell.clearHeuristics();
         }
     };
 

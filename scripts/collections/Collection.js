@@ -31,11 +31,14 @@ define(function (require) {
 
 
     Collection.prototype.getModelWithLowest = function (key) {
-        var currentLowest = Infinity;
+        if (this.models.length === 0) {
+            return null;
+        }
         var i = 0;
-        var model;
-        var modelWithLowest = null;
         var models = this.models;
+        var model = models[i++];
+        var currentLowest = model[key];
+        var modelWithLowest = model;
         var value;
         while ((model = models[i++]) !== undefined) {
             value = model[key];
