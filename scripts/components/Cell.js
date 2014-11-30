@@ -21,11 +21,11 @@ define(function (require) {
 
 
     Cell.TYPE = {
-        START:          new CellType('grid-cell_start'),
-        FINAL:          new CellType('grid-cell_final'),
-        INACCESSIBLE:   new CellType('grid-cell_inaccessible', false),
-        PLAIN:          new CellType('grid-cell_plain'),
-        PATH:           new CellType('grid-cell_path')
+        START:  new CellType('grid-cell_start'),
+        FINAL:  new CellType('grid-cell_final'),
+        WALL:   new CellType('grid-cell_wall', false),
+        PLAIN:  new CellType('grid-cell_plain'),
+        PATH:   new CellType('grid-cell_path')
     };
 
 

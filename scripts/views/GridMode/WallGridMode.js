@@ -57,7 +57,7 @@ define(function (require) {
             return;
         }
 
-        this.newCellType = cell.type.isWalkable ? Cell.TYPE.INACCESSIBLE : Cell.TYPE.PLAIN;
+        this.newCellType = cell.type.isWalkable ? Cell.TYPE.WALL : Cell.TYPE.PLAIN;
         cell.setType(this.newCellType);
 
         this.gridView.updatePath();

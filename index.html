@@ -1,10 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
+
+    <meta name="viewport" content="initial-scale = 1.0, maximum-scale = 1.0" />
+
     <title>Dijkstra's Algorithm</title>
 
     <link rel="stylesheet" href="reset.css" />
-    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Raleway:300" />
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Raleway:500" />
     <link rel="stylesheet" href="screen.css" />
 
     <script src="bower_components/requirejs/require.js"></script>
@@ -12,23 +15,41 @@
 </head>
 <body>
 
-    <div data-view="Grid">
-    </div>
+<div class="main">
+    <div class="main-tier">
 
-    <div data-view="UI">
-        <div class="radio">
-            <input type="radio" name="mode" id="radio_1" class="radio-input" value="start" checked />
-            <label for="radio_1" class="radio-label">Start</label>
+        <div class="vr_2x">
+            <div data-view="Grid">
+            </div>
         </div>
-        <div class="radio">
-            <input type="radio" name="mode" id="radio_2" class="radio-input" value="final" />
-            <label for="radio_2" class="radio-label">End</label>
+
+        <div data-view="UI">
+            <div class="card">
+                <ul class="hList mix-hList_1x">
+                    <li>
+                        <div class="radio">
+                            <input type="radio" name="mode" id="radio_1" class="radio-input" value="start" checked />
+                            <label for="radio_1" class="radio-label">Start</label>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="radio radio_final">
+                            <input type="radio" name="mode" id="radio_2" class="radio-input" value="final" />
+                            <label for="radio_2" class="radio-label">End</label>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="radio radio_wall">
+                            <input type="radio" name="mode" id="radio_3" class="radio-input" value="wall" />
+                            <label for="radio_3" class="radio-label">Wall</label>
+                        </div>
+                    </li>
+                </ul>
+            </div>
         </div>
-        <div class="radio">
-            <input type="radio" name="mode" id="radio_3" class="radio-input" value="wall" />
-            <label for="radio_3" class="radio-label">Wall</label>
-        </div>
+
     </div>
+</div>
 
     <script>
         requirejs.config({
