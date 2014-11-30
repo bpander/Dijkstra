@@ -28,7 +28,9 @@ define(function (require) {
 
         while ((cell = cells[i++]) !== undefined) {
             cell.element.addEventListener('mousedown', this._onCellMouseDown);
+            cell.element.addEventListener('touchstart', this._onCellMouseDown);
             cell.element.addEventListener('mouseup', this._onCellMouseUp);
+            cell.element.addEventListener('touchend', this._onCellMouseUp);
         }
 
         return this;
@@ -42,7 +44,9 @@ define(function (require) {
 
         while ((cell = cells[i++]) !== undefined) {
             cell.element.removeEventListener('mousedown', this._onCellMouseDown);
+            cell.element.removeEventListener('touchstart', this._onCellMouseDown);
             cell.element.removeEventListener('mouseup', this._onCellMouseUp);
+            cell.element.removeEventListener('touchend', this._onCellMouseUp);
         }
 
         return this;
