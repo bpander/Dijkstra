@@ -26,6 +26,7 @@ define(function (require) {
 
     Cell.prototype.init = function () {
         this.element.classList.add('grid-cell');
+        this.element.cell = this;
         return this;
     };
 
