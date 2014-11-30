@@ -2,31 +2,45 @@ body {
     font-family: Raleway, sans-serif;
 }
 
+
 .grid {
     table-layout: fixed;
 }
 
 .grid-cell {
-    width: 20px;
-    height: 20px;
     border: 1px solid #000000;
 }
 
-.grid-cell_start {
+.grid-cell:before {
+    content: '';
+    display: block;
+    width: 20px;
+    height: 20px;
+    transform: scale(1);
+    transition: transform 200ms, background-color 200ms;
+}
+
+.grid-cell_start:before {
     background-color: #0f0;
 }
 
-.grid-cell_final {
+.grid-cell_final:before {
     background-color: #f00;
 }
 
-.grid-cell_inaccessible {
+.grid-cell_inaccessible:before {
     background-color: #00f;
 }
 
-.grid-cell_path {
+.grid-cell_path:before {
     background-color: #ff0;
 }
+
+.grid-cell_plain:before {
+    transform: scale(0);
+    background-color: transparent;
+}
+
 
 .radio {
     display: inline-block;
