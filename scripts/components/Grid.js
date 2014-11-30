@@ -15,6 +15,8 @@ define(function (require) {
 
         this.cells = [];
 
+        this.cellsFlattened = [];
+
         this.init();
     }
 
@@ -38,6 +40,7 @@ define(function (require) {
                 cell = new Cell(i_row, i_col);
                 tr.appendChild(cell.element);
                 this.cells[i_row][i_col] = cell;
+                this.cellsFlattened.push(cell);
             }
             this.element.appendChild(tr);
         }
@@ -132,6 +135,16 @@ define(function (require) {
             }
         }
         return cells;
+    };
+
+
+    Grid.prototype.clear = function () {
+        var cell;
+        var cells = this.cellsFlattened;
+        var i = 0;
+        while ((cell = cells[i++]) !== undefined) {
+            cell.reset();
+        }
     };
 
 
