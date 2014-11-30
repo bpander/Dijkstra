@@ -23,3 +23,21 @@
 .grid-cell_path {
     background-color: #ff0;
 }
+
+.radio {
+    display: inline-block;
+}
+
+.radio-input {
+    visibility: hidden;
+}
+
+.radio-label {
+    border: 1px solid #0ff;
+    display: block;
+    padding: 10px;
+}
+
+.radio-input:checked + .radio-label {
+    background-color: #0ff;
+}
