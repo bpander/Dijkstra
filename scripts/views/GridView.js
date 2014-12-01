@@ -12,7 +12,7 @@ define(function (require) {
 
         this.element = element;
 
-        this.grid = new Grid(12, 12);
+        this.grid = new Grid(13, 11);
 
         this.cellStart = null;
 
@@ -51,8 +51,11 @@ define(function (require) {
 
     GridView.prototype.init = function () {
         this.element.appendChild(this.grid.element);
-        this.cellStart = this.grid.getCell(2, 3);
-        this.cellFinal = this.grid.getCell(2, 8);
+        this.cellStart = this.grid.getCell(6, 2);
+        this.cellFinal = this.grid.getCell(6, 8);
+        this.grid.getCell(5, 5).setType(Cell.TYPE.WALL);
+        this.grid.getCell(6, 5).setType(Cell.TYPE.WALL);
+        this.grid.getCell(7, 5).setType(Cell.TYPE.WALL);
         this.updatePath();
         return this;
     };
